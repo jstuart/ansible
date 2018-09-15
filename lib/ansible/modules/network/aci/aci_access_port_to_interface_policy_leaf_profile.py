@@ -282,11 +282,18 @@ def main():
     interface_type = module.params['interface_type']
     state = module.params['state']
 
+    if interface_type == 'fex':
+        top_class = 'infraFexP'
+        top_rn = 'fexprof'
+    else:
+        top_class = 'infraAccPortP'
+        top_rn = 'accportprof'
+
     aci = ACIModule(module)
     aci.construct_url(
         root_class=dict(
-            aci_class='infraAccPortP',
-            aci_rn='infra/accportprof-{0}'.format(leaf_interface_profile),
+            aci_class=top_class,
+            aci_rn='infra/{0}-{1}'.format(top_rn, leaf_interface_profile),
             module_object=leaf_interface_profile,
             target_filter={'name': leaf_interface_profile},
         ),
